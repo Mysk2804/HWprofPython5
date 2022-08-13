@@ -2,19 +2,31 @@ import datetime
 import os
 
 
-def log_zodiac(old_function):
-    def new_function(*args, **kwargs):
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        zodiac = old_function(*args, **kwargs)
-        log = f'Дата: {date} Имя функции: {old_function.__name__} Аргументы: {args},{kwargs} Результат: {zodiac}\n'
-        path = os.path.join(os.getcwd(), 'log_file.txt')
-        with open(path, 'a') as f:
-            f.write(log)
-        return old_function(*args, **kwargs)
-    return new_function
+# def log_zodiac(old_function):
+#     def new_function(*args, **kwargs):
+#         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#         zodiac = old_function(*args, **kwargs)
+#         log = f'Дата: {date} Имя функции: {old_function.__name__} Аргументы: {args},{kwargs} Результат: {zodiac}\n'
+#         with open('log_file.txt', 'a') as f:
+#             f.write(log)
+#         return old_function(*args, **kwargs)
+#     return new_function
+#
+
+def log(file_path):
+    def log_zodiac(old_function):
+        def new_function(*args, **kwargs):
+            date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            zodiac = old_function(*args, **kwargs)
+            log = f'Дата: {date} Имя функции: {old_function.__name__} Аргументы: {args},{kwargs} Результат: {zodiac}\n'
+            with open(file_path, 'a') as f:
+                f.write(log)
+            return old_function(*args, **kwargs)
+        return new_function
+    return log_zodiac
 
 
-@log_zodiac
+@log(os.path.join(os.getcwd(), 'log_file2.txt'))
 def zodiac_fun(month, number):
     if month == 'Январь':
         if number >=20:
